@@ -6,9 +6,7 @@ import plotly.express as px
 import requests
 import json
 
-
 # Dataframe Creation
-
 #sql connection
 mydb = sql.connect(host="127.0.0.1",
                     user="root",
@@ -20,64 +18,47 @@ cursor = mydb.cursor()
 #aggre_insurance_df
 cursor.execute("SELECT * FROM aggregated_insurance")
 table1=cursor.fetchall()
-
 Aggre_insurance=pd.DataFrame(table1,columns=("States","Years","Quarter","Transaction_type","Transaction_count","Transaction_amount"))
 
 #aggre_transaction_df
 cursor.execute("SELECT * FROM aggregated_transaction")
 table2=cursor.fetchall()
-
 Aggre_transaction=pd.DataFrame(table2,columns=("States","Years","Quarter","Transaction_type","Transaction_count","Transaction_amount"))
-
 
 #aggre_user_df
 cursor.execute("SELECT * FROM aggregated_user")
 table3=cursor.fetchall()
-
 Aggre_user=pd.DataFrame(table3,columns=("States","Years","Quarter","Brands","Transaction_count","Percentage"))
-
 
 #map_insurance_df
 cursor.execute("SELECT * FROM map_insurance")
 table4=cursor.fetchall()
-
 Map_insurance=pd.DataFrame(table4,columns=("States","Years","Quarter","Districts","Transaction_count","Transaction_amount"))
-
 
 #map_transaction_df
 cursor.execute("SELECT * FROM map_transaction")
 table5=cursor.fetchall()
-
 Map_transaction=pd.DataFrame(table5,columns=("States","Years","Quarter","Districts","Transaction_count","Transaction_amount"))
-
 
 #map_user_df
 cursor.execute("SELECT * FROM map_user")
 table6=cursor.fetchall()
-
 Map_user=pd.DataFrame(table6,columns=("States","Years","Quarter","Districts","RegisteredUsers","AppOpens"))
-
 
 #top_insurance_df
 cursor.execute("SELECT * FROM top_insurance")
 table7=cursor.fetchall()
-
 top_insurance=pd.DataFrame(table7,columns=("States","Years","Quarter","Pincodes","Transaction_count","Transaction_amount"))
-
 
 #top_transaction_df
 cursor.execute("SELECT * FROM top_transaction")
 table8=cursor.fetchall()
-
 top_transaction=pd.DataFrame(table8,columns=("States","Years","Quarter","Pincodes","Transaction_count","Transaction_amount"))
-
 
 #top_user_df
 cursor.execute("SELECT * FROM top_user")
 table9=cursor.fetchall()
-
 top_user=pd.DataFrame(table9,columns=("States","Years","Quarter","Pincodes","RegisteredUsers"))
-
 
 
 def Transaction_amount_count_Y(df,year):
@@ -109,7 +90,7 @@ def Transaction_amount_count_Y(df,year):
             states_name.append(feature["properties"]["ST_NM"])
         states_name.sort()
 
-        fig_india_1=px.choropleth(tacyg, geojson=data1, locations="States", featureidkey="properties.ST_NM", color="Transaction_amount",color_continuous_scale="Rainbow",
+        fig_india_1=px.choropleth(tacyg, geojson=data1, locations="States", featureidkey="properties.ST_NM", color="Transaction_amount",color_continuous_scale="brwnyl",
                                     range_color=(tacyg["Transaction_amount"].min(),tacyg["Transaction_amount"].max()),
                                     hover_name="States", title=f"{year} TRANSACTION AMOUNT", fitbounds="locations",
                                     height=650, width=600)     
@@ -118,7 +99,7 @@ def Transaction_amount_count_Y(df,year):
         st.plotly_chart(fig_india_1)
 
     with col2:
-        fig_india_2=px.choropleth(tacyg, geojson=data1, locations="States", featureidkey="properties.ST_NM", color="Transaction_count",color_continuous_scale="Rainbow",
+        fig_india_2=px.choropleth(tacyg, geojson=data1, locations="States", featureidkey="properties.ST_NM", color="Transaction_count",color_continuous_scale="brwnyl",
                                     range_color=(tacyg["Transaction_count"].min(),tacyg["Transaction_count"].max()),
                                     hover_name="States", title=f"{year} TRANSACTION COUNT", fitbounds="locations",
                                     height=650, width=600)     
@@ -156,7 +137,7 @@ def Transaction_amount_count_Y_Q (df,quarter):
         states_name.sort()
 
         fig_india_1=px.choropleth(tacyg, geojson=data1, locations="States", featureidkey="properties.ST_NM",
-                                color="Transaction_amount",color_continuous_scale="Rainbow",
+                                color="Transaction_amount",color_continuous_scale="brwnyl",
                                 range_color=(tacyg["Transaction_amount"].min(),tacyg["Transaction_amount"].max()),
                                 hover_name="States", title=f"{tacy['Years'].unique()} YEAR {quarter} TRANSACTION AMOUNT", fitbounds="locations",
                                 height=650, width=600)     
@@ -166,7 +147,7 @@ def Transaction_amount_count_Y_Q (df,quarter):
 
     with col2:
         fig_india_2=px.choropleth(tacyg, geojson=data1, locations="States", featureidkey="properties.ST_NM", 
-                                color="Transaction_count",color_continuous_scale="Rainbow",
+                                color="Transaction_count",color_continuous_scale="brwnyl",
                                 range_color=(tacyg["Transaction_count"].min(),tacyg["Transaction_count"].max()),
                                 hover_name="States", title=f"{tacy['Years'].unique()} YEAR {quarter} TRANSACTION COUNT", fitbounds="locations",
                                 height=650, width=600)     
@@ -304,7 +285,6 @@ def map_user_plot_3(df,states):
 
         st.plotly_chart(fig_map_user_bar_2)
 
-
 # top_insurance_plot1
 def Top_inurance_plot_1(df,state):
     tiy= df[df["States"]==state]
@@ -348,7 +328,6 @@ def top_user_plot_2(df, state):
                         color_continuous_scale= px.colors.sequential.Cividis_r)
 
     st.plotly_chart(fig_top_plot_2)
-
 
 # top_chart_transaction_amount
 def top_chart_transaction_amount(table_name):
@@ -473,7 +452,6 @@ def top_chart_transaction_count(table_name):
     fig_amount3= px.bar (df_3, x="Transaction_count", y = "States", title=f"AVERAGE OF TRANSACTION COUNT",orientation = "h",
                             color_discrete_sequence=px.colors.sequential.Blues_r,height=800, width=800)
     st.plotly_chart(fig_amount3) 
-
 
 # top_chart_registered_user
 def top_chart_registered_user(table_name, state):
@@ -669,13 +647,20 @@ def top_chart_registered_users(table_name):
     st.plotly_chart(fig_amount3) 
 
 
-#streamli part
-
+#streamlit part
 st.set_page_config(layout="wide")
-st.title('PHONEPE DATA VISUALIZATION AND EXPLORATION')
-
+st.title('PHONEPE PULSE DATA VISUALIZATION AND EXPLORATION')
 
 with st.sidebar:
+    st.markdown(
+    """
+    <style>
+        [data-testid="stSidebar"] {
+            background-color: #ADD8E6; /* Light Blue */
+        }
+    </style>
+    """,
+    unsafe_allow_html=True)
     select= option_menu("Main Menu",["HOME", "DATA EXPLORATION", "TOP CHARTS"])
 
 if select == "HOME":
@@ -688,8 +673,7 @@ elif select == "DATA EXPLORATION":
     tab1, tab2, tab3 = st.tabs(["Aggregated Analysis", "Map Analysis", "Top Analysis"])
 
     with tab1:
-         
-        method = st.radio("select the method",["Insurance Analysis","Transaction Analysis","User Analysis"])
+        method = st.radio("Select the method",["Insurance Analysis","Transaction Analysis","User Analysis"])
 
         if method == "Insurance Analysis":
 
@@ -774,7 +758,7 @@ elif select == "DATA EXPLORATION":
 
     with tab2:
          
-        method2 = st.radio("select the method",["Map Insurance","Map Transaction","Map User"])
+        method2 = st.radio("Select the method",["Map Insurance","Map Transaction","Map User"])
 
         if method2 == "Map Insurance":
             
@@ -867,7 +851,7 @@ elif select == "DATA EXPLORATION":
 
     with tab3:
          
-        method3 = st.radio("select the method_",["Top Insurance","Top Transaction","Top User"])
+        method3 = st.radio("Select the method",["Top Insurance","Top Transaction","Top User"])
 
         if method3 == "Top Insurance":
             
